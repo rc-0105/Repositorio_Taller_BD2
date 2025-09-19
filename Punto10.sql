@@ -1,0 +1,22 @@
+CREATE OR REPLACE TRIGGER trg_auditoriaPedidos 
+
+AFTER DELETE ON PEDIDO 
+
+FOR EACH ROW 
+
+BEGIN 
+
+    INSERT INTO AUDITORIA_PEDIDOS (id_pedido, usuario_bd, fecha_evento, accion) 
+
+    VALUES (:OLD.id_pedido, USER, SYSDATE, 'DELETE'); 
+
+END; 
+
+/ 
+
+SELECT * FROM PEDIDO; 
+
+DELETE FROM DETALLE_PEDIDO WHERE id_pedido = 1001; 
+DELETE FROM PEDIDO WHERE id_pedido = 1001; 
+COMMIT; 
+SELECT * FROM AUDITORIA_PEDIDOS WHERE id_pedido = 1001;
